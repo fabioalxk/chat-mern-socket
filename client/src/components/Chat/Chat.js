@@ -16,7 +16,7 @@ const Chat = ({ location }) => {
   const [users, setUsers] = useState("");
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
-  const ENDPOINT = "http://localhost:3000";
+  const ENDPOINT = "http://localhost:5000";
 
   useEffect(() => {
     const { name, room } = queryString.parse(location.search);
@@ -36,6 +36,20 @@ const Chat = ({ location }) => {
   useEffect(() => {
     socket.on("message", (message) => {
       setMessages([...messages, message]);
+    });
+
+    socket.on("loadMessages", (chats) => {
+      console.log("loading");
+      // const newArr = [...chats];
+      const newArr = [];
+      // console.log(chats.messages);
+      // chats.map((chat) => console.log(chat.messages));
+      if (chats) {
+        if (chats.messages) {
+          console.log(chats);
+          setMessages([...messages, ...chats.messages]);
+        }
+      }
     });
 
     socket.on("roomData", ({ users }) => {
@@ -62,6 +76,7 @@ const Chat = ({ location }) => {
       <div className="container">
         <InfoBar room={room} />
         <Messages messages={messages} name={name} />
+        {/* {console.log("ok", messages, name)} */}
         <Input
           message={message}
           setMessage={setMessage}
