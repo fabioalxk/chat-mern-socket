@@ -1,5 +1,5 @@
-const socketio = require("socket.io");
 const { addUser, removeUser, getUser, getUsersInRoom } = require("./users");
+const socketio = require("socket.io");
 
 const startSocket = (server) => {
   const io = socketio(server);
