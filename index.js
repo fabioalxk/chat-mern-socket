@@ -15,7 +15,7 @@ const io = socketio(server);
 
 connectDB();
 app.use(cors());
-app.use(router);
+//app.use(router);
 
 // const loadAllMessages = (roomname) => {
 //   Chat.find({ roomname })
