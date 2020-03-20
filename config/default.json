@@ -1,0 +1,4 @@
+{
+  "mongoURI": "mongodb://fabioalxk:faleosm5@cluster0-shard-00-00-7lkow.mongodb.net:27017,cluster0-shard-00-01-7lkow.mongodb.net:27017,cluster0-shard-00-02-7lkow.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true",
+  "jwtSecret": "sl_myJwtSecret"
+}
