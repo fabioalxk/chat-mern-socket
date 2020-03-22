@@ -1,1 +1,4 @@
 /node_modules
+/server/node_modules
+/server/client/node_modules
+/worker-stock/node_modules

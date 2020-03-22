@@ -1,0 +1,5 @@
+{
+  "uri": "amqp://admin:12345@localhost",
+  "stockRequestQueue": "stockRequestQueue",
+  "stockResponseQueue": "stockResponseQueue"
+}
