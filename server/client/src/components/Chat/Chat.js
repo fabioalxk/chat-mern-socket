@@ -40,10 +40,7 @@ const Chat = ({ location }) => {
 
     socket.on("loadMessages", (chats) => {
       console.log("loading");
-      // const newArr = [...chats];
       const newArr = [];
-      // console.log(chats.messages);
-      // chats.map((chat) => console.log(chat.messages));
       if (chats) {
         if (chats.messages) {
           console.log(chats);
@@ -67,7 +64,8 @@ const Chat = ({ location }) => {
     event.preventDefault();
 
     if (message) {
-      socket.emit("sendMessage", message, () => setMessage(""));
+      socket.emit("sendMessage", message);
+      setMessage("");
     }
   };
 
@@ -76,7 +74,6 @@ const Chat = ({ location }) => {
       <div className="container">
         <InfoBar room={room} />
         <Messages messages={messages} name={name} />
-        {/* {console.log("ok", messages, name)} */}
         <Input
           message={message}
           setMessage={setMessage}
