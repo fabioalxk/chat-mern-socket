@@ -4,20 +4,15 @@
   "description": "Repository created for supporting my talk about 'Rabbit Workers'",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "publisher": "babel-node ./src/publisher/publisher.js",
-    "worker": "babel-node ./src/worker/worker.js"
+    "start": "node worker.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Otavioensa/rabbit-workers-talk.git"
+    "url": ""
   },
-  "author": "Otávio Augusto <otavioensa@gmail.com>",
+  "author": "",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/Otavioensa/rabbit-workers-talk/issues"
-  },
-  "homepage": "https://github.com/Otavioensa/rabbit-workers-talk#readme",
+  "homepage": "",
   "dependencies": {
     "amqplib": "^0.5.2",
     "axios": "^0.19.2",
