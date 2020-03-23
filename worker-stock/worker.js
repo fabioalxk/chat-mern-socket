@@ -1,15 +1,21 @@
+/*
+  Strategy:
+
+  1) The worker will start listening to qeue to receive a message with the stock_code in it
+  2) Once the message is received, the worker will consume the message
+  3) The worker will call the Stock API, get the results and parse it
+  4) The worker will send the stock quotes result back to the server using another queue
+*/
+
 const amqp = require("amqplib");
 const { resolve } = require("bluebird");
 const axios = require("axios");
 const config = require("config");
-
 const assertQueueOptions = { durable: true };
 const consumeQueueOptions = { noAck: false };
-
 const uri = config.get("uri");
 const stockRequestQueue = config.get("stockRequestQueue");
 const stockResponseQueue = config.get("stockResponseQueue");
-
 const sendToQueueOptions = { persistent: true };
 
 const assertAndSendToQueue = (channel, data) => {
@@ -22,7 +28,7 @@ const assertAndSendToQueue = (channel, data) => {
     );
 };
 
-const requestStock = (channel, msg) =>
+const requestStockApi = (channel, msg) =>
   resolve(console.log("Message received: " + msg.content.toString())).then(
     () => {
       let stockCode = msg.content.toString().split("=")[1];
@@ -48,10 +54,10 @@ const requestStock = (channel, msg) =>
 const assertAndConsumeQueue = (channel) => {
   console.log("Worker is running! Waiting for new messages...");
 
-  const ackMsg = (msg) =>
-    resolve(msg)
-      .tap((msg) => requestStock(channel, msg))
-      .then((msg) => channel.ack(msg));
+  const ackMsg = (consumedMessage) =>
+    resolve(consumedMessage)
+      .tap((consumedMessage) => requestStockApi(channel, consumedMessage))
+      .then((consumedMessage) => channel.ack(consumedMessage));
 
   return channel
     .assertQueue(stockRequestQueue, assertQueueOptions)
