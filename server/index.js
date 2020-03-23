@@ -1,18 +1,3 @@
-/*
-  The Chat has 3 events: Join room, Send Message and Disconnect
-
-  Join Room: Is the event that occurs when the users joins the room.
-    When this event occurs, the 50 previous messages are retrieved from MongoDB and displayed to the user
-    The user receives a greet message
-    Notify every user in the room that the new user has just joined
-
-  Send Message: Is the event that occurs when the user types a message and press Enter or clicks Send
-    It saves the message to the database and send a message for the entire room or
-    it requests stock quotes to the bot and sends the message only for the user that requested the stock quote
-
-  Disconnect: Closes the channel. Otherwise the channel will be up even after logout and will cause bugs.
-*/
-
 const http = require("http");
 const express = require("express");
 const socketio = require("socket.io");

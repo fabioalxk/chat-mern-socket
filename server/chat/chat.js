@@ -1,6 +1,18 @@
+/*
+  The Chat has 3 events: Join room, Send Message and Disconnect
+
+  Join Room: Is the event that occurs when the users joins the room.
+    When this event occurs, the 50 previous messages are retrieved from MongoDB and displayed to the user
+    Notify every user in the room that the new user has just joined
+
+  Send Message: Is the event that occurs when the user types a message and press Enter or clicks Send
+    It saves the message to the database and send a message for the entire room or
+    it requests stock quotes to the bot and sends the message only for the user that requested the stock quote
+
+  Disconnect: Closes the channel. Otherwise the channel will be up even after logout and will cause bugs.
+*/
 const Chat = require("../model/Chat");
 const stockJob = require("../service/stocks");
-
 const { addUser, removeUser, getUser, getUsersInRoom } = require("../users");
 let channel;
 
@@ -44,12 +56,6 @@ module.exports = (io) => {
           throw err;
         });
 
-      // Greet message
-      socket.emit("message", {
-        user: "admin",
-        text: `${user.name}, welcome to room ${user.room}.`
-      });
-
       // Notify every user in the room that the new user has just joined
       socket.broadcast
         .to(user.room)
@@ -73,8 +79,8 @@ module.exports = (io) => {
       };
 
       /* 
-              Create a room if there isn't one in database yet.
-            */
+        Create a room if there isn't one in database yet.
+    */
       Chat.findOne({ roomname: user.room })
         .then((chatRoom) => {
           if (!chatRoom) {

@@ -13,7 +13,6 @@ let socket;
 const Chat = ({ location }) => {
   const [name, setName] = useState("");
   const [room, setRoom] = useState("");
-  const [users, setUsers] = useState("");
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const ENDPOINT = "http://localhost:5000";
@@ -40,17 +39,11 @@ const Chat = ({ location }) => {
 
     socket.on("loadMessages", (chats) => {
       console.log("loading");
-      const newArr = [];
       if (chats) {
         if (chats.messages) {
-          // console.log(chats);
           setMessages([...messages, ...chats.messages.reverse()]);
         }
       }
-    });
-
-    socket.on("roomData", ({ users }) => {
-      setUsers(users);
     });
 
     return () => {
