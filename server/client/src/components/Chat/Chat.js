@@ -65,7 +65,7 @@ const Chat = ({ location }) => {
 
     // If there are more than 50 messages on the chat,
     // remove first from front-end when inserting a new one
-    if (messages.length > 0) {
+    if (message && messages.length > 50) {
       messages.splice(0, 1);
     }
     if (message) {

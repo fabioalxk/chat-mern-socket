@@ -1,15 +1,12 @@
 const amqp = require("amqplib");
 const { resolve } = require("bluebird");
 const config = require("config");
-
 const assertQueueOptions = { durable: true };
 const sendToQueueOptions = { persistent: true };
 const consumeQueueOptions = { noAck: false };
-
 const uri = config.get("uri");
 const stockRequestQueue = config.get("stockRequestQueue");
 const stockResponseQueue = config.get("stockResponseQueue");
-let socket;
 
 const assertAndConsumeQueue = (channel, socket) => {
   this.socket = socket;
@@ -56,7 +53,7 @@ const assertAndSendToQueue = (channel, message) => {
     );
 };
 
-const requestStock = (resolve, reject) =>
+const requestStock = () =>
   amqp
     .connect(uri)
     .then((connection) => connection.createChannel())
@@ -68,7 +65,7 @@ const start = () => {
   return requestStock();
 };
 
-const exportObject = {
+module.exports = {
   assertQueueOptions,
   sendToQueueOptions,
   consumeQueueOptions,
@@ -79,4 +76,3 @@ const exportObject = {
   assertAndSendToQueue,
   assertAndConsumeQueue
 };
-module.exports = exportObject;
