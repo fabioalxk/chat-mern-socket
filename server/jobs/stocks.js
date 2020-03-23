@@ -20,7 +20,7 @@ const assertAndConsumeQueue = (channel, socket) => {
       console.log(msg.content.toString());
       this.responseMsg = msg.content.toString();
       socket.emit("message", {
-        user: "admin",
+        user: "Bot",
         text: msg.content.toString()
       });
 
@@ -46,8 +46,8 @@ const assertAndConsumeQueue = (channel, socket) => {
 };
 // end consumer
 
-const assertAndSendToQueue = (channel) => {
-  const bufferedData = Buffer.from("Request Stock");
+const assertAndSendToQueue = (channel, message) => {
+  const bufferedData = Buffer.from(message);
 
   return channel
     .assertQueue(stockRequestQueue, assertQueueOptions)

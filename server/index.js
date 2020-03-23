@@ -25,10 +25,34 @@ io.on("connect", (socket) => {
 
     socket.join(user.room);
 
-    Chat.find({ roomname: user.room })
+    /////
+    Chat.aggregate([
+      {
+        $match: { roomname: user.room }
+      },
+      {
+        $unwind: "$messages"
+      },
+      {
+        $sort: { "messages.date": -1 }
+      },
+      {
+        $limit: 50
+      },
+      {
+        $group: { _id: "$_id", messages: { $push: "$messages" } }
+      },
+      {
+        $project: { messages: 1, _id: 0 }
+      }
+    ])
+      ///////
+
+      //Chat.find({ roomname: user.room })
       .then((data) => {
         if (data) {
-          const json = JSON.stringify(data[0]);
+          console.log("data.length");
+          console.log(data[0].messages.length);
           socket.emit("loadMessages", data[0]);
         }
       })
@@ -71,7 +95,6 @@ io.on("connect", (socket) => {
     Chat.findOne({ roomname: user.room })
       .then((chatRoom) => {
         if (!chatRoom) {
-          // create room and save message
           newChat.messages.unshift(newMessage);
 
           newChat
@@ -94,22 +117,13 @@ io.on("connect", (socket) => {
           chatRoom
             .save()
             .then((data) => {
-              if (message == "/stock") {
+              if (message.match(/\/stock=.+/)) {
                 stockJob
                   .start()
                   .then((channel) => {
-                    stockJob.assertAndSendToQueue(channel);
+                    stockJob.assertAndSendToQueue(channel, message);
 
                     stockJob.assertAndConsumeQueue(channel, socket);
-                    // .then((result) => {
-                    //   socket.emit("message", {
-                    //     user: "admin",
-                    //     text: "stocks message"
-                    //   });
-                    // })
-                    // .catch((err) => {
-                    //   if (err) throw err;
-                    // });
                   })
                   .catch((err) => {
                     if (err) throw err;

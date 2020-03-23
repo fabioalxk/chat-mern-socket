@@ -43,8 +43,8 @@ const Chat = ({ location }) => {
       const newArr = [];
       if (chats) {
         if (chats.messages) {
-          console.log(chats);
-          setMessages([...messages, ...chats.messages]);
+          // console.log(chats);
+          setMessages([...messages, ...chats.messages.reverse()]);
         }
       }
     });
@@ -63,6 +63,11 @@ const Chat = ({ location }) => {
   const sendMessage = (event) => {
     event.preventDefault();
 
+    // If there are more than 50 messages on the chat,
+    // remove first from front-end when inserting a new one
+    if (messages.length > 0) {
+      messages.splice(0, 1);
+    }
     if (message) {
       socket.emit("sendMessage", message);
       setMessage("");
