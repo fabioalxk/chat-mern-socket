@@ -13,6 +13,7 @@ const router = require("./router");
 const app = express();
 const server = http.createServer(app);
 const io = socketio(server);
+let channel;
 
 connectDB();
 app.use(cors());
@@ -112,6 +113,7 @@ io.on("connect", (socket) => {
             stockJob
               .start()
               .then((channel) => {
+                this.channel = channel;
                 stockJob.assertAndSendToQueue(channel, message);
 
                 stockJob.assertAndConsumeQueue(channel, socket);
@@ -143,6 +145,9 @@ io.on("connect", (socket) => {
 
   socket.on("disconnect", () => {
     const user = removeUser(socket.id);
+    if (channel) {
+      channel.close();
+    }
 
     if (user) {
       io.to(user.room).emit("message", {
