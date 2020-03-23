@@ -25,7 +25,7 @@ io.on("connect", (socket) => {
 
     socket.join(user.room);
 
-    /////
+    // Find only the last 50 messages
     Chat.aggregate([
       {
         $match: { roomname: user.room }
@@ -46,13 +46,8 @@ io.on("connect", (socket) => {
         $project: { messages: 1, _id: 0 }
       }
     ])
-      ///////
-
-      //Chat.find({ roomname: user.room })
       .then((data) => {
         if (data) {
-          console.log("data.length");
-          console.log(data[0].messages.length);
           socket.emit("loadMessages", data[0]);
         }
       })
@@ -113,33 +108,34 @@ io.on("connect", (socket) => {
               console.log(err);
             });
         } else {
-          chatRoom.messages.push(newMessage);
-          chatRoom
-            .save()
-            .then((data) => {
-              if (message.match(/\/stock=.+/)) {
-                stockJob
-                  .start()
-                  .then((channel) => {
-                    stockJob.assertAndSendToQueue(channel, message);
+          if (message.match(/\/stock=.+/)) {
+            stockJob
+              .start()
+              .then((channel) => {
+                stockJob.assertAndSendToQueue(channel, message);
 
-                    stockJob.assertAndConsumeQueue(channel, socket);
-                  })
-                  .catch((err) => {
-                    if (err) throw err;
-                  });
-              } else {
-                io.to(user.room).emit("message", {
-                  user: user.name,
-                  text: message
-                });
-                callback();
-              }
-            })
-            .catch((err) => {
-              console.log("something wrong when saving");
-              console.log(err);
+                stockJob.assertAndConsumeQueue(channel, socket);
+              })
+              .catch((err) => {
+                if (err) throw err;
+              });
+          } else {
+            chatRoom.messages.push(newMessage);
+            chatRoom
+              .save()
+              .then((data) => {
+                console.log("data saved successfully");
+              })
+              .catch((err) => {
+                console.log("something wrong when saving");
+                console.log(err);
+              });
+            io.to(user.room).emit("message", {
+              user: user.name,
+              text: message
             });
+            callback();
+          }
         }
       })
       .catch((err) => {});
