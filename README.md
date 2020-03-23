@@ -21,7 +21,7 @@ This is a project that I made based on web tutorial. It's a Real Time Chat, with
     > npm i
     > npm start
 
-    RabbitMq inside a docker container
+    Start RabbitMq inside a docker container
     Command to create a docker container
     > docker run --name rabbitmq3.7-server -e RABBITMQ_ERLANG_COOKIE='fabio alexandrino' -e RABBITMQ_DEFAULT_USER=admin -e RABBITMQ_DEFAULT_PASS=12345 -p 4369:4369 -p 5671:5671 -p 5672:5672 -p 25672:25672 -p 15672:15672 -d rabbitmq:3.7-management
 
