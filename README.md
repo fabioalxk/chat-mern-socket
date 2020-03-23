@@ -4,6 +4,8 @@ This is a project that I made based on web tutorial. It's a Real Time Chat, with
 
 # How to run it
 
+    Unzip /server/config/default.rar
+
     Server
     > cd server
     > npm i
