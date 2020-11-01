@@ -1,6 +1,12 @@
-# Project Setup
+# Description
 
-This is a chat for multiple users, using react, node, mongodb and rabbitmq
+This is a chat for multiple users, using react, node, mongodb and rabbitmq.
+
+1. There are multiple rooms
+2. Users can send messages just for people that are in the same rooms
+3. Users can search for stocks by typing /stock=aapl.us, where "aapl.us" is the stock's name
+
+# Project Setup
 
 # 1) Configure the Database URI
 
